@@ -1,9 +1,12 @@
 
-image: "rust:alpine3.17"
+image: "rust:1.68"
 
+
+stages:
+  - test
 
 test:cargo:
+  stage: test
   script:
-    - rustc --version && cargo --version  # Print version info for debugging
+    - rustc --version && cargo --version
     - cargo test --workspace --verbose
-

@@ -206,6 +206,30 @@ impl<LastType: Clone + 'static> InjectionBinder<LastType> {
         Err(err)
     }
 
+
+    fn verify_nested_lazy_deps(&self,
+                               short_types: bool) -> anyhow::Result<()> {
+        let invalid_lazy_types: Vec<_> = self.requirements_graph.iter()
+            .filter(|(type_id, _)| self.lazy_types.contains(type_id))
+            .filter(|(_, requirements)| {
+                requirements.iter().any(|x| self.lazy_types.contains(x))
+            })
+            .map(|(type_id, _)| *type_id)
+            .collect();
+
+        if invalid_lazy_types.is_empty() {
+            return Ok(());
+        }
+
+        let recursive_names = invalid_lazy_types.into_iter()
+            .flat_map(|x| self.type_names.get(&x))
+            .map(|name| make_name_shorter(name, short_types));
+        let recursive_names = join(recursive_names, ", ");
+        let message = format!("Nested lazy dependencies: {recursive_names}");
+        let err = anyhow::Error::msg(message);
+        Err(err)
+    }
+
     fn verify_recursive_deps(&self,
                              additional_types: &HashSet<TypeId>,
                              short_types: bool) -> anyhow::Result<()> {
@@ -226,27 +250,15 @@ impl<LastType: Clone + 'static> InjectionBinder<LastType> {
             .cloned()
             .collect();
 
-        let resolved_lazy_types: HashSet<_> = {
-            let all_types: HashSet<_> = self.requirements_graph.iter()
-                .cloned()
-                .map(|(id, _)| id)
-                .chain(additional_types.iter().cloned())
-                .filter(|x| !self.lazy_types.contains(x))
-                .collect();
-
+        let resolved_lazy_types: HashSet<_> =
             self.requirements_graph
                 .iter()
                 .map(|(k, v)| (*k, v))
-                .filter(|(k, _)| self.lazy_types.contains(k) && {
-                    let dependencies = self.requirements_graph.iter()
-                        .find(||)
-                    all_types.contains(k)
-                })
-                .map(|(type_id, _)| type_id )
-                .collect()
-        };
+                .filter(|(k, _)| self.lazy_types.contains(k))
+                .map(|(type_id, _)| type_id)
+                .collect();
 
-        // starting dependency vector that remains
+        // Let's start by initializing lazy dependencies
         for lazy_type in resolved_lazy_types.iter().cloned() {
             available_types.insert(lazy_type);
             on_resolve(lazy_type)?;
@@ -336,6 +348,7 @@ impl<LastType: Clone + 'static> InjectionBinder<LastType> {
             .collect();
 
         self.verify_duplicates(&additional_deps, short_types)?;
+        self.verify_nested_lazy_deps(short_types)?;
         self.verify_missing_deps(&additional_deps, short_types)?;
         // Order is important, as the recursion check will also find fields where dependencies are missing
         self.verify_recursive_deps(&additional_deps, short_types)?;
