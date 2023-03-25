@@ -171,7 +171,7 @@ fn resolve_simple_value_reverse_order() {
 
 
 #[test]
-fn resolve_values_with_multipple_deps() {
+fn resolve_values_with_multiple_deps() {
     #[derive(Component, Clone)]
     struct A {
         x: u32,
@@ -231,7 +231,7 @@ fn resolve_auto_boxing() {
 }
 
 #[test]
-fn resolve_recursive_dependencies() {
+fn resolve_cyclic_dependencies() {
     #[derive(Component, Clone)]
     struct A {
         x: u32,
@@ -239,12 +239,12 @@ fn resolve_recursive_dependencies() {
     }
     #[derive(Component, Clone)]
     struct B {
-        _a: A,
+        a: A,
         x: u32,
     }
     #[derive(Component, Clone)]
     struct C {
-        _b: B,
+        b: B,
         _a: A,
         x: u64,
     }
@@ -263,10 +263,10 @@ fn resolve_recursive_dependencies() {
         .unwrap();
 
     let x = inject.get::<C>().unwrap();
-    assert_eq!(x._b._a.x, 1);
-    assert_eq!(x._b.x, 1);
+    assert_eq!(x.b.a.x, 1);
+    assert_eq!(x.b.x, 1);
     assert_eq!(x.x, 2);
-    assert_eq!(x._b._a.c.x, 2);
+    assert_eq!(x.b.a.c.x, 2);
 }
 
 #[test]
@@ -342,7 +342,7 @@ fn read_tuples() {
 }
 
 #[test]
-fn resolve_values_with_multipple_deps_tuple_init() {
+fn resolve_values_with_multiple_deps_tuple_init() {
     #[derive(Component, Clone)]
     struct A {
         _x: u32,
@@ -459,7 +459,7 @@ fn fail_on_missing_lazy_values() {
     assert!(inject_res.is_err());
     let err_string = inject_res.err().unwrap().to_string();
     assert!(err_string.contains("Missing injection values"));
-    assert!(err_string.contains("A"));
+    assert!(err_string.contains("MissingStruct"));
 }
 
 #[test]
@@ -478,8 +478,8 @@ fn fail_on_nested_lazy_values() {
 
     assert!(inject_res.is_err());
     let err_string = inject_res.err().unwrap().to_string();
-    assert!(err_string.contains("Missing injection values"));
-    assert!(err_string.contains("A"));
+    assert!(err_string.contains("Nested lazy dependencies"));
+    assert!(err_string.contains("MissingStruct"));
 }
 
 #[test]
