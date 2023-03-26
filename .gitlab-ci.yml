@@ -22,4 +22,5 @@ publish-crate:
   only:
     refs:
       - main
+  when: manual
 
