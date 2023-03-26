@@ -17,7 +17,7 @@ publish-crate:
   image: registry.gitlab.com/torkleyy/cargo-publish-all:latest
   stage: publish
   script:
-    - cargo-publish-all --token $CRATES_IO_TOKEN --yes
+    - cargo-publish-all --token $CARGO_REGISTRY_TOKEN --yes
   only:
     refs:
       - main
