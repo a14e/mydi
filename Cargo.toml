@@ -2,6 +2,10 @@
 name = "mydi"
 version = "0.1.0"
 edition = "2021"
+authors = ["Borisenko Andrei m0hct3r@gmail.com"]
+readme = "README.md"
+keywords = ["dependency", "injection", "di"]
+categories = ["config", "rust-patterns"]
 
 
 [dependencies]

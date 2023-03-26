@@ -2,8 +2,11 @@
 name = "mydi_macros"
 version = "0.1.0"
 edition = "2021"
+authors = ["Borisenko Andrei m0hct3r@gmail.com"]
+readme = "../README.md"
+keywords = ["dependency", "injection", "di"]
+categories = ["config", "rust-patterns"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
 proc-macro = true
