@@ -4,9 +4,22 @@ image: "rust:1.68"
 
 stages:
   - test
+  - publish
 
 test:cargo:
   stage: test
   script:
     - rustc --version && cargo --version
-    - cargo test --workspace --verbose
+    - cargo test --workspace
+
+
+publish-crate:
+  image: rust:latest
+  stage: publish
+  script:
+    - cargo login $CARGO_REGISTRY_TOKEN
+    - cargo publish
+  only:
+    refs:
+      - master
+
