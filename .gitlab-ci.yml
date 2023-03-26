@@ -10,7 +10,7 @@ test:cargo:
   stage: test
   script:
     - rustc --version && cargo --version
-    - cargo test --workspace
+    - cargo test
 
 
 publish-crate:
