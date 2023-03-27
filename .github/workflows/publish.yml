@@ -27,8 +27,15 @@ jobs:
         with:
           command: test
 
+
+      - name: Publish macroses to crates.io
+        uses: actions-rs/cargo@v1
+        with:
+          command: cd macros; publish
+          args: --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
       - name: Publish to crates.io
         uses: actions-rs/cargo@v1
         with:
           command: publish
-          args: --token ${{ secrets.CRATES_IO_TOKEN }}
+          args: --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
