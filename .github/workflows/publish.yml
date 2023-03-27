@@ -10,17 +10,22 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust-version: ['1.68']
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Rust
-        uses: actions/setup-rust@v2
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust-version }}
 
       - name: Run tests
         run: cargo test
-
 
       - name: Publish macroses to crates.io
         run: cd macros; publish  --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
