@@ -11,10 +11,11 @@ A Rust Dependency Injection (DI) library focused on simplicity and composability
 * Ability to use multiple structures with the same types through tagging
 * Usage of default traits and arbitrary functions for default arguments
 
-This library enables efficient management of complex projects with numerous nested structures by assembling
-various application components, such as configurations, database connections, payment service clients,
-Kafka connections, and more. My DI keeps dependency management organized, easy to read, and expandable,
-providing a solid foundation for the growth of your project.
+This library streamlines the management of complex projects with numerous nested structures by organizing the assembly 
+and integration of various application components, such as configurations, database connections, payment service clients,
+Kafka connections, and more. While not providing these components directly, the library significantly simplifies the 
+organization and management of your application's structure if it consists of such elements. My DI ensures dependency 
+management remains organized, easy to read, and expandable, laying a solid foundation for the growth of your project.
 
 ## How to connect the library?
 
@@ -694,6 +695,11 @@ Licensed under either of Apache License, Version 2.0 or MIT license at your opti
 Any contribution is welcome. Just write tests and submit merge requests
 on [GitLab](https://gitlab.com/BorisenkoA/my-di).
 All others merge requests will be closed with a request to add a merge request on GitLab.
+
+# Roadmap
+[_] Better handling of default values
+[_] Add dependency flags
+[_] Add ahash support
 
 # Special thanks to
 
