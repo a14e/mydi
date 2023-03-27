@@ -6,6 +6,7 @@ authors = ["Borisenko Andrei m0hct3r@gmail.com"]
 readme = "README.md"
 keywords = ["dependency", "injection", "di"]
 categories = ["config", "rust-patterns"]
+repository = "https://github.com/a14e/mydi"
 
 
 [dependencies]
