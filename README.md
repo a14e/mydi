@@ -700,6 +700,7 @@ All others merge requests will be closed with a request to add a merge request o
 [_] Better handling of default values
 [_] Add dependency flags
 [_] Add ahash support
+up[_] Custom errors
 
 # Special thanks to
 
