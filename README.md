@@ -23,7 +23,7 @@ Simply add the dependency to your Cargo.toml:
 
 ```toml
 [dependencies]
-mydi = "0.1.1"
+mydi = "0.1.2"
 ```
 
 ## So, what's the problem? Why do I need this?
@@ -50,7 +50,7 @@ struct B {
     x: u64
 }
 
-impl A {
+impl B {
     pub fn new(x: u64) -> Self {
         Self { x }
     }
@@ -60,7 +60,7 @@ struct C {
     x: f32
 }
 
-impl A {
+impl C {
     pub fn new(x: f32) -> Self {
         Self { x }
     }
@@ -700,7 +700,7 @@ All others merge requests will be closed with a request to add a merge request o
 [_] Better handling of default values
 [_] Add dependency flags
 [_] Add ahash support
-up[_] Custom errors
+[_] Custom errors
 
 # Special thanks to
 
