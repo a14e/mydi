@@ -1,8 +1,6 @@
 use std::sync::Arc;
 use dyn_clone::DynClone;
-use mydi::injection_binder::InjectionBinder;
-use mydi::{erase};
-use mydi_macros::Component;
+use mydi::{erase, Component, InjectionBinder};
 
 #[test]
 fn resolve_simple_values() {

@@ -5,6 +5,8 @@ pub mod injector;
 pub mod tags;
 pub mod injection_binder;
 
+pub use mydi_macros::Component;
+
 pub type Injector = injector::Injector;
 pub type InjectionBinder<T> = injection_binder::InjectionBinder<T>;
 

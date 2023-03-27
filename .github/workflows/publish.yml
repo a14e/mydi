@@ -33,5 +33,5 @@ jobs:
       - name: Navigate back
         run: cd ..
 
-      - name: Publish to crates.io
+      - name: Publish DI to crates.io
         run: cargo publish  --token ${{ secrets.CARGO_REGISTRY_TOKEN }}

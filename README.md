@@ -22,7 +22,7 @@ Simply add the dependency to your Cargo.toml:
 
 ```toml
 [dependencies]
-mydi = "0.1.0"
+mydi = "0.1.1"
 ```
 
 ## So, what's the problem? Why do I need this?
@@ -104,8 +104,7 @@ As you can see, we write each argument in at least 4 places:
 Now let's try to simplify all this with My DI:
 
 ```rust
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 #[derive(Component, Clone)]
 struct A {
@@ -170,8 +169,7 @@ For example, like this:
 
 ```rust
 
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 fn build_dependencies(config: MyConfig) -> InjectionBinder<()> {
     todo!()
@@ -238,10 +236,9 @@ In each module, its own `InjectionBinder` will be assembled, and in main.rs, the
 
 ```rust
 
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
-#[derive(mydi::Component, Clone)]
+#[derive(Component, Clone)]
 struct MyApp {}
 
 impl MyApp {
@@ -295,8 +292,7 @@ Meanwhile, the module for controllers might be assembled like this:
 
 ```rust
 
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 pub fn build_dependencies() -> InjectionBinder<()> {
     InjectionBinder::new()
@@ -317,7 +313,7 @@ and that's what the `.void()` method is used for.
 To add dependencies, the best way is to use the derive macro Component:
 
 ```rust
-use mydi_macros::Component;
+use mydi::{InjectionBinder, Component};
 
 #[derive(Component, Clone)]
 struct A {
@@ -348,8 +344,7 @@ In some cases, using macros may be inconvenient, so it makes sense to use functi
 For this, use the `inject_fn` method:
 
 ```rust
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 #[derive(Component, Clone)]
 struct A {
@@ -420,8 +415,7 @@ Currently, there are 2 ways to get values: getting a single dependency and getti
 
 ```rust
 
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 #[derive(Component, Clone)]
 struct A {}
@@ -450,8 +444,7 @@ the `Clone` trait and have a `'static` lifetime:
 
 ```rust
 
-use mydi_macros::Component;
-use mydi::InjectionBinder;
+use mydi::{InjectionBinder, Component};
 
 #[derive(Component, Clone)]
 struct A<T: Clone + 'static> {
@@ -479,9 +472,7 @@ exception and a build error. But for this situation, there is a special Lazy typ
 It is applied simply by adding it to the inject method:
 
 ```rust
-
-use mydi_macros::Component;
-use mydi::{InjectionBinder, Lazy};
+use mydi::{InjectionBinder, Component, Lazy};
 
 #[derive(Component, Clone)]
 struct A {
@@ -516,8 +507,7 @@ For these situations, there is a special auto trait and erase! macro.
 For example, like this:
 
 ```rust
-use mydi_macros::Component;
-use mydi::{InjectionBinder, erase};
+use mydi::{InjectionBinder, Component, erase};
 
 #[derive(Component, Clone)]
 pub struct A {
@@ -556,9 +546,7 @@ But if you need to use something like `Box` instead of `Arc`, you need to use th
 dyn-clone)[https://github.com/dtolnay/dyn-clone]
 
 ```rust
-use mydi_macros::Component;
-use mydi::InjectionBinder;
-use std::sync::Arc;
+use mydi::{InjectionBinder, Component};
 use dyn_clone::DynClone;
 
 #[derive(Component, Clone)]
