@@ -29,13 +29,10 @@ jobs:
 
 
       - name: Publish macroses to crates.io
-        uses: actions-rs/cargo@v1
-        with:
-          command: cd macros; publish
-          args: --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cd macros; publish  --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Navigate back
+        run: cd ..
 
       - name: Publish to crates.io
-        uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: publish  --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
