@@ -697,15 +697,15 @@ on [GitLab](https://gitlab.com/BorisenkoA/my-di).
 All others merge requests will be closed with a request to add a merge request on GitLab.
 
 # Roadmap
-[_] Better handling of default values
-[_] Add dependency flags
-[_] Add ahash support
-[_] Custom errors
+- [ ] Better handling of default values
+- [ ] Add Cargo features
+- [ ] Add ahash support
+- [ ] Custom errors
 
 # Special thanks to
 
 * Chat GPT-4, which helped me write all this documentation and correct a huge number of errors in the code
-* Christine, who was my inspiration
+* Kristina, who was my inspiration
 * Numerous libraries in Java, Scala, and Rust that I used as references
 * Library authors, you are the best
 * Stable Diffusion, which helped me to create logo :-)
