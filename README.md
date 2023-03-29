@@ -540,11 +540,11 @@ writing `.inject_fn(|(x, )| -> Arc<dyn Test> { Arc::new(x) })`,
 but doing so would require writing a lot of boilerplate code, which you'd want to avoid.
 
 Why might we need to work with `dyn traits`?
-One reason is to abstract away from implementations and simplify the use of mocks, such as those from the (
-mockall)[https://github.com/asomers/mockall] library.
+One reason is to abstract away from implementations and simplify the use of mocks, such as those from the [
+mockall](https://github.com/asomers/mockall) library.
 
-But if you need to use something like `Box` instead of `Arc`, you need to use the library (
-dyn-clone)[https://github.com/dtolnay/dyn-clone]
+But if you need to use something like `Box` instead of `Arc`, you need to use the library [
+dyn-clone](https://github.com/dtolnay/dyn-clone)
 
 ```rust
 use mydi::{InjectionBinder, Component};
