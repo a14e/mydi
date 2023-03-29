@@ -691,10 +691,7 @@ Current implementation limitations:
 Licensed under either of Apache License, Version 2.0 or MIT license at your option.
 
 # Contribution
-
 Any contribution is welcome. Just write tests and submit merge requests
-on [GitLab](https://gitlab.com/BorisenkoA/my-di).
-All others merge requests will be closed with a request to add a merge request on GitLab.
 
 # Roadmap
 - [ ] Better handling of default values
