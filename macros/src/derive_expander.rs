@@ -44,7 +44,7 @@ pub(crate) fn derive_expand_impl(ident: Ident,
         return Ok(quote!(
         #[automatically_derived]
         impl #impl_generics mydi::expander::ComponentExpander for #ident #ty_generics #where_clause {
-            fn expand<INJECTION_BINDER_TYPE: Clone + 'static>(self, injector: InjectionBinder<INJECTION_BINDER_TYPE>) -> InjectionBinder<INJECTION_BINDER_TYPE>  {
+            fn expand<INJECTION_BINDER_TYPE: Clone + 'static>(self, injector: mydi::injection_binder::InjectionBinder<INJECTION_BINDER_TYPE>) -> mydi::injection_binder::InjectionBinder<INJECTION_BINDER_TYPE>  {
                 injector
             }
         }
@@ -55,10 +55,11 @@ pub(crate) fn derive_expand_impl(ident: Ident,
 
         #[automatically_derived]
         impl #impl_generics mydi::expander::ComponentExpander for #ident #ty_generics #where_clause {
-            fn expand<INJECTION_BINDER_TYPE: Clone + 'static>(self, injector: InjectionBinder<INJECTION_BINDER_TYPE>) -> InjectionBinder<INJECTION_BINDER_TYPE>  {
+            fn expand<INJECTION_BINDER_TYPE: Clone + 'static>(self, injector: mydi::injection_binder::InjectionBinder<INJECTION_BINDER_TYPE>) -> mydi::injection_binder::InjectionBinder<INJECTION_BINDER_TYPE>  {
                 let Self {#( #fields),* , .. } = self;
-                injector
-                  #(.instance(#fields))*
+                injector #(
+                    .instance(#fields)
+                )*
             }
 
         }
