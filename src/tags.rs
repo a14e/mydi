@@ -1,13 +1,12 @@
-use std::any::TypeId;
-use std::marker::PhantomData;
 use crate::component_meta::ComponentMeta;
 use crate::injector::Injector;
+use std::any::TypeId;
+use std::marker::PhantomData;
 
 pub struct Tagged<T, Tag> {
     x: T,
     _phantom: PhantomData<Tag>,
 }
-
 
 impl<T> Tagged<T, ()> {
     pub fn pure(x: T) -> Self {
@@ -17,7 +16,10 @@ impl<T> Tagged<T, ()> {
 
 impl<T, Tag> Tagged<T, Tag> {
     pub fn new(x: T) -> Self {
-        Self { x, _phantom: PhantomData }
+        Self {
+            x,
+            _phantom: PhantomData,
+        }
     }
 
     pub fn tagged<NewTag>(self) -> Tagged<T, NewTag> {

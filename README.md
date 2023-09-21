@@ -10,12 +10,14 @@ A Rust Dependency Injection (DI) library focused on simplicity and composability
 * Working with dyn traits
 * Ability to use multiple structures with the same types through tagging
 * Usage of default traits and arbitrary functions for default arguments
+* The ability to not only assemble classes but also disassemble classes into components. For example, for use with configurations.
 
 This library streamlines the management of complex projects with numerous nested structures by organizing the assembly 
 and integration of various application components, such as configurations, database connections, payment service clients,
 Kafka connections, and more. While not providing these components directly, the library significantly simplifies the 
 organization and management of your application's structure if it consists of such elements. My DI ensures dependency 
 management remains organized, easy to read, and expandable, laying a solid foundation for the growth of your project.
+
 
 ## How to connect the library?
 
@@ -675,6 +677,70 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 The Tagged type implements std::ops::Deref, which allows you to directly call methods of the nested object through it.
+
+# Expansion
+# Basic Expansion
+It's also possible not only to assemble classes but also to disassemble them into components. 
+This can be useful in situations with configuration structs. 
+For instance, if we have a tree of objects, we can automatically inject objects of nested struct fields.
+```rust
+#[derive(Clone, mydi::ExpandComponent)]
+struct ApplicationConfig {
+    http_сonfig: HttpConfig,
+    cache_сonfig: CacheConfig
+}
+#[derive(Clone)]
+struct HttpConfig {
+    port: u32,
+    host: String
+}
+#[derive(Clone)]
+struct CacheConfig {
+    ttl: std::time::Duration,
+    size: usize
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config1: ApplicationConfig = todo!();
+    let inject_res = InjectionBinder::new()
+        .expand(config1)
+        // .instance(config1.http_сonfig) these two substitutions will be done inside expand
+        // .instance(config1.cache_сonfig)
+        .build()?;
+    todo!()
+}
+```
+
+# Ignoring fields during Expansion
+In some cases, we want to inject not all fields, but only some of them. For these scenarios, use the directive
+`#[ignore_expansion]`
+```rust
+#[derive(Clone, mydi::ExpandComponent)]
+struct ApplicationConfig {
+    http_сonfig: HttpConfig,
+    #[ignore_expansion] // this field will now not be injected
+    cache_сonfig: CacheConfig
+}
+#[derive(Clone)]
+struct HttpConfig {
+    port: u32,
+    host: String
+}
+#[derive(Clone)]
+struct CacheConfig {
+    ttl: std::time::Duration,
+    size: usize
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config1: ApplicationConfig = todo!();
+    let inject_res = InjectionBinder::new()
+        .expand(config1)
+        // .instance(config1.http_сonfig) this substitution will be done inside expand
+        .build()?;
+    todo!()
+}
+```
 
 # Limitations
 

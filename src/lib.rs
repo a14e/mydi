@@ -1,11 +1,12 @@
-
 pub mod component_meta;
-mod tuples;
+pub mod expander;
+pub mod injection_binder;
 pub mod injector;
 pub mod tags;
-pub mod injection_binder;
+mod tuples;
 
 pub use mydi_macros::Component;
+pub use mydi_macros::ExpandComponent;
 
 pub type Injector = injector::Injector;
 pub type InjectionBinder<T> = injection_binder::InjectionBinder<T>;
@@ -19,7 +20,7 @@ impl<T: Clone + 'static> crate::component_meta::ComponentMeta for Lazy<T> {
         let func: Box<dyn FnOnce() -> T + 'static> = Box::new(move || -> T {
             match injector.get::<T>() {
                 Ok(x) => x,
-                _ => unreachable!()
+                _ => unreachable!(),
             }
         });
         let result = once_cell::sync::Lazy::new(func);
@@ -41,9 +42,7 @@ impl<T: Clone + 'static> crate::component_meta::ComponentMeta for Lazy<T> {
 
 #[macro_export]
 macro_rules! erase {
-   ( $pointer:ident < $dyn_type:ty > ) => ({
-        |x| ->  $pointer< $dyn_type  > {
-            $pointer::new(x)
-        }
-    })
+    ( $pointer:ident < $dyn_type:ty > ) => {{
+        |x| -> $pointer<$dyn_type> { $pointer::new(x) }
+    }};
 }

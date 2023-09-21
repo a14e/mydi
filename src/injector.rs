@@ -1,9 +1,9 @@
-use std::any::{Any, type_name, TypeId};
-use std::collections::HashMap;
-use std::sync::Arc;
+use crate::tuples::TupleInjectTypes;
 use anyhow::anyhow;
 use parking_lot::RwLock;
-use crate::tuples::TupleInjectTypes;
+use std::any::{type_name, Any, TypeId};
+use std::collections::HashMap;
+use std::sync::Arc;
 
 #[derive(Default, Clone)]
 pub struct Injector {
@@ -23,7 +23,8 @@ impl Injector {
 
     pub fn get<X: Clone + 'static>(&self) -> anyhow::Result<X> {
         let type_id = TypeId::of::<X>();
-        self.values.read()
+        self.values
+            .read()
             .get(&type_id)
             .and_then(|x| x.as_ref().downcast_ref::<X>())
             .cloned()
