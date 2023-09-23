@@ -29,7 +29,7 @@ pub fn derive_inject(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
 
 // Inspired by a part of SeaORM: https://github.com/SeaQL/sea-orm/blob/master/sea-orm-macros/src/derives/active_model.rs
 // Assistance with macros provided by ChatGPT-4
-#[proc_macro_derive(ExpandComponent, attributes(ignore_expansion))]
+#[proc_macro_derive(ComponentExpander, attributes(ignore_expand, nested_expand, force_expand))]
 pub fn derive_expansion(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let DeriveInput {
         ident,

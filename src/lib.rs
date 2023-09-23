@@ -6,7 +6,7 @@ pub mod tags;
 mod tuples;
 
 pub use mydi_macros::Component;
-pub use mydi_macros::ExpandComponent;
+pub use mydi_macros::ComponentExpander;
 
 pub type Injector = injector::Injector;
 pub type InjectionBinder<T> = injection_binder::InjectionBinder<T>;

@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 use std::sync::Arc;
 use dyn_clone::DynClone;
 use mydi::{erase, Component, InjectionBinder};
-use mydi_macros::ExpandComponent;
+use mydi_macros::ComponentExpander;
 
 #[test]
 fn resolve_simple_values() {
@@ -611,7 +611,7 @@ fn fail_on_cyclic_dep() {
 
 #[test]
 fn should_work_with_expansion() {
-    #[derive(ExpandComponent)]
+    #[derive(ComponentExpander)]
     struct A {
         x: u32,
     }
@@ -628,7 +628,7 @@ fn should_work_with_expansion() {
 
 #[test]
 fn should_work_with_expansion_with_multiple_fields() {
-    #[derive(ExpandComponent)]
+    #[derive(ComponentExpander)]
     struct A {
         x: u32,
         y: u64,
@@ -645,13 +645,50 @@ fn should_work_with_expansion_with_multiple_fields() {
     assert_eq!(y, 2);
 }
 
-
 #[test]
-fn should_work_with_expansion_with_ignore() {
-    #[derive(ExpandComponent)]
+fn should_work_with_expansion_with_box() {
+    #[derive(ComponentExpander)]
     struct A {
         x: u32,
-        #[ignore_expansion]
+        y: u64,
+    }
+
+    let inject = InjectionBinder::new()
+        .expand(Box::new(A { x: 1, y: 2 }))
+        .build()
+        .unwrap();
+
+    let x = inject.get::<u32>().unwrap();
+    assert_eq!(x, 1);
+    let y = inject.get::<u64>().unwrap();
+    assert_eq!(y, 2);
+}
+
+
+#[test]
+fn should_work_with_expansion_with_arc() {
+    #[derive(ComponentExpander, Clone)]
+    struct A {
+        x: u32,
+        y: u64,
+    }
+
+    let inject = InjectionBinder::new()
+        .expand(Arc::new(A { x: 1, y: 2 }))
+        .build()
+        .unwrap();
+
+    let x = inject.get::<u32>().unwrap();
+    assert_eq!(x, 1);
+    let y = inject.get::<u64>().unwrap();
+    assert_eq!(y, 2);
+}
+#[test]
+fn should_work_with_expansion_with_ignore() {
+    #[derive(ComponentExpander)]
+    struct A {
+        x: u32,
+        #[ignore_expand]
         _y: u64,
     }
 
@@ -669,10 +706,10 @@ fn should_work_with_expansion_with_ignore() {
 
 #[test]
 fn should_work_with_generics() {
-    #[derive(ExpandComponent)]
+    #[derive(ComponentExpander)]
     struct A<T> {
         x: u32,
-        #[ignore_expansion]
+        #[ignore_expand]
         _p: PhantomData<T>,
     }
 
@@ -685,4 +722,60 @@ fn should_work_with_generics() {
     assert_eq!(x, 1);
     let y = inject.get::<PhantomData<()>>();
     assert_eq!(y.is_err(), true);
+}
+
+#[test]
+fn should_work_for_nested_expand() {
+    #[derive(ComponentExpander, Clone)]
+    struct InnerStruct {
+        x: u32,
+        y: u64,
+    }
+    #[derive(ComponentExpander, Clone)]
+    struct Nested {
+        #[nested_expand]
+        x: InnerStruct,
+    }
+
+
+    let inject = InjectionBinder::new()
+        .expand(Nested { x: InnerStruct { x: 1, y: 2 } })
+        .build()
+        .unwrap();
+
+    let x = inject.get::<u32>().unwrap();
+    assert_eq!(x, 1);
+    let y = inject.get::<u64>().unwrap();
+    assert_eq!(y, 2);
+
+    let y = inject.get::<InnerStruct>();
+    assert_eq!(y.is_err(), true);
+}
+
+
+#[test]
+fn should_work_for_nested_expand_forced() {
+    #[derive(ComponentExpander, Clone)]
+    struct InnerStruct {
+        x: u32,
+        y: u64,
+    }
+    #[derive(ComponentExpander, Clone)]
+    struct Nested {
+        #[force_expand]
+        #[nested_expand]
+        x: InnerStruct,
+    }
+
+
+    let inject = InjectionBinder::new()
+        .expand(Nested { x: InnerStruct { x: 1, y: 2 } })
+        .build()
+        .unwrap();
+
+    let x = inject.get::<u32>().unwrap();
+    assert_eq!(x, 1);
+    let x = inject.get::<InnerStruct>().unwrap();
+    assert_eq!(x.x, 1);
+    assert_eq!(x.y, 2);
 }

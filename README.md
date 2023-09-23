@@ -88,7 +88,7 @@ impl D {
 fn main() {
     let a = A::new(1);
     let b = B::new(2);
-    let c = C::new(3f64);
+    let c = C::new(3.0f32);
     let d = D::new(a, b, c);
     d.run()
 }
@@ -678,13 +678,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 The Tagged type implements std::ops::Deref, which allows you to directly call methods of the nested object through it.
 
-# Expansion
-# Basic Expansion
+# Expanding
+# Basic Expanding
 It's also possible not only to assemble classes but also to disassemble them into components. 
 This can be useful in situations with configuration structs. 
 For instance, if we have a tree of objects, we can automatically inject objects of nested struct fields.
 ```rust
-#[derive(Clone, mydi::ExpandComponent)]
+#[derive(Clone, mydi::ComponentExpander)]
 struct ApplicationConfig {
     http_сonfig: HttpConfig,
     cache_сonfig: CacheConfig
@@ -711,14 +711,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-# Ignoring fields during Expansion
+# Ignoring fields during Expanding
 In some cases, we want to inject not all fields, but only some of them. For these scenarios, use the directive
-`#[ignore_expansion]`
+`#[ignore_expand]`
 ```rust
-#[derive(Clone, mydi::ExpandComponent)]
+#[derive(Clone, mydi::ComponentExpander)]
 struct ApplicationConfig {
     http_сonfig: HttpConfig,
-    #[ignore_expansion] // this field will now not be injected
+    #[ignore_expand] // this field will now not be injected
     cache_сonfig: CacheConfig
 }
 #[derive(Clone)]
@@ -731,6 +731,45 @@ struct CacheConfig {
     ttl: std::time::Duration,
     size: usize
 }
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config1: ApplicationConfig = todo!();
+    let inject_res = InjectionBinder::new()
+        .expand(config1)
+        // .instance(config1.http_сonfig) this substitution will be done inside expand
+        .build()?;
+    todo!()
+}
+```
+
+# Nested expanding
+You can also expand nested structures. To do this, use the annotation `#[nested_expand]`. 
+It's important to note that the structure itself will not be expanded. 
+However, if you need to expand it, you can use the `#[force_expand]` annotation.
+
+```rust
+#[derive(Clone, mydi::ComponentExpander)]
+struct ApplicationConfig {
+    http_сonfig: HttpConfig,
+    #[nested_expand] /// the fields of this structure will be injected, but the structure itself won't be
+    // #[force_expand] if you uncomment this annotation, this field will also be injected
+    logic_config: BusinessLogicConfigs
+}
+#[derive(Clone, mydi::ComponentExpander)]
+struct NestedExpanding {
+    port: u32,
+    host: String
+}
+#[derive(Clone, mydi::ComponentExpander)]
+struct BusinessLogicConfigs {
+    some_logic: LogicConfigs // this structure will be injected
+}
+#[derive(Clone)]
+struct LogicConfigs {
+    
+}
+
+
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config1: ApplicationConfig = todo!();
