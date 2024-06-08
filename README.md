@@ -25,7 +25,7 @@ Simply add the dependency to your Cargo.toml:
 
 ```toml
 [dependencies]
-mydi = "0.1.2"
+mydi = "0.2.3"
 ```
 
 ## So, what's the problem? Why do I need this?
