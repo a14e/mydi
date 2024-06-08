@@ -132,7 +132,7 @@ fn read_default_value(field: &Field) -> Result<DefaultValue> {
     let mut default_value: DefaultValue = DefaultValue::None;
 
     for attribute in &field.attrs {
-        if attribute.path.is_ident("component") {
+        if attribute.path().is_ident("component") {
             if let DefaultValue::None = default_value {
                 let component_args = attribute.parse_args_with(|input: ParseStream| {
                     if input.is_empty() {

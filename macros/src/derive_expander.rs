@@ -104,8 +104,8 @@ pub(crate) fn derive_expand_impl(ident: Ident,
 
 fn ignore_expand(field: &Field) -> bool {
     for attribute in &field.attrs {
-        if attribute.path.is_ident("ignore_expand") ||
-            attribute.path.is_ident("mydi::ignore_expand") {
+        if attribute.path().is_ident("ignore_expand") ||
+            attribute.path().is_ident("mydi::ignore_expand") {
             return true;
         }
     }
@@ -116,8 +116,8 @@ fn ignore_expand(field: &Field) -> bool {
 
 fn nested_expand(field: &Field) -> bool {
     for attribute in &field.attrs {
-        if attribute.path.is_ident("nested_expand") ||
-            attribute.path.is_ident("mydi::nested_expand") {
+        if attribute.path().is_ident("nested_expand") ||
+            attribute.path().is_ident("mydi::nested_expand") {
             return true;
         }
     }
@@ -128,8 +128,8 @@ fn nested_expand(field: &Field) -> bool {
 
 fn force_expand(field: &Field) -> bool {
     for attribute in &field.attrs {
-        if attribute.path.is_ident("force_expand") ||
-            attribute.path.is_ident("mydi::force_expand") {
+        if attribute.path().is_ident("force_expand") ||
+            attribute.path().is_ident("mydi::force_expand") {
             return true;
         }
     }

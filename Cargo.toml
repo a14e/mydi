@@ -1,6 +1,6 @@
 [package]
 name = "mydi"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2018"
 authors = ["Borisenko Andrei m0hct3r@gmail.com"]
 readme = "README.md"
@@ -13,12 +13,12 @@ description = "MyDI. Dependency Injection library"
 
 
 [dependencies]
-anyhow = "1.0.69"
-once_cell = "1.17.1"
-parking_lot = "0.12.1"
+anyhow = "1.0.86"
+once_cell = "1.19.0"
+parking_lot = "0.12.3"
 
-mydi_macros = { path = "./macros" , version = "0.2.2"  }
+mydi_macros = { path = "./macros" , version = "0.2.3"  }
 
 [dev-dependencies]
-dyn-clone = "1.0.11"
+dyn-clone = "1.0.17"
 
