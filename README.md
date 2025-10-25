@@ -28,6 +28,15 @@ Simply add the dependency to your Cargo.toml:
 mydi = "0.2.3"
 ```
 
+## Minimum supported Rust version (MSRV)
+
+This crate requires Rust **1.80.0** or newer. It is recommended to declare the minimum supported Rust version in your `Cargo.toml`:
+
+```toml
+[package]
+rust-version = "1.80.0"
+```
+
 ## So, what's the problem? Why do I need this?
 
 Approaches using separate mechanisms for DI are common in other languages like Java and Scala, but not as widespread in
@@ -806,8 +815,6 @@ Any contribution is welcome. Just write tests and submit merge requests
 
 # Special thanks to
 
-* Chat GPT-4, which helped me write all this documentation and correct a huge number of errors in the code
-* Kristina, who was my inspiration
 * Numerous libraries in Java, Scala, and Rust that I used as references
 * Library authors, you are the best
 * Stable Diffusion, which helped me to create logo :-)
